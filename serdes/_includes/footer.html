@@ -1,0 +1,10 @@
+<footer>
+  <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">
+    <span>
+        <b>{{ site.owner}}</b>
+    </span>
+    {% capture currentyear %}{{ 'now' | date: "%Y" }}{% endcapture %}
+    <span>© {{ currentyear }}</span></a>
+&nbsp; &nbsp;
+  <a href="{{ "/privacy" | prepend: site.baseurl | replace: '//', '/' }}">Privacy Policy</a>
+</footer>
