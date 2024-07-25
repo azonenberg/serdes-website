@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Memory mapping an FPGA from an STM32"
-date:   2024-07-24 21:00:00 -0700
+date:   2024-07-24 20:45:00 -0700
 ---
 
 I teased at this a bit in my previous posts and finally have a setup I'm happy with, so I thought I'd do a more
@@ -18,7 +18,8 @@ that make it suit my needs and preferences better:
 
 * Using a MCU-class Cortex-M CPU instead of an applications processor is simpler to program in a bare-metal no-OS
 or minimal RTOS environment
-* The large (564 kB) on chip SRAM and 1 MB on chip flash eliminates the need for time-consuming DDR SDRAM layout
+* The large (564 kB) on chip SRAM and 1 MB on chip flash eliminates the need for time-consuming DDR SDRAM layout for my
+typical firmwares (<200 kB each of ram/flash used)
 * The disaggregated pinout (two smaller BGAs rather than one larger one) is simpler to fan out on less PCB layers, and
 allows placing the FPGA and MCU with some distance between them if this is more convenient for layout reasons
 * Decentralizing allows the FPGA and MCU to enforce security boundaries between each other. For example, the FPGA can
@@ -36,7 +37,7 @@ NOR/NAND flash, etc.
 
 Most importantly, unlike the OCTOSPI peripheral on the STM32H735, there is no hardware caching or prefetch in the FMC
 IP itself - only the normal L1 I/D caches provided by the Cortex-M7. And there's not even any need to mess with these,
-since the first FMC bank has a mapping at 0xc000_0000 which is strongly configured as ordered, uncached, device memory
+since the first FMC bank has a mapping at 0xc000_0000 which is configured as strongly ordered, uncached, device memory
 in the MPU right out of the box - no need to mess around with MPU registers to turn off the cache for this range.
 
 The FMC operating mode most amenable to FPGA bridging is synchronous PSRAM since this provides a clock (which can be
@@ -55,7 +56,7 @@ I didn't have any boards with a suitable combination of MCU, FPGA, and interconn
 test board in KiCAD. It's a six layer design on Shengyi S1000-2M (cost optimized Asian FR-4 class material) since
 there's nothing particularly fast on the board and I wanted it to be cheap.
 
-(board photo here)
+[![Photo of test board with RJ45 jack and Ethernet PHY in the top left corner, Spartan-7 FPGA right center, MCU in the middle, and power inlet in the bottom left](/assets/fmc-test-800.jpg)](/assets/fmc-test-full.jpg)
 
 The board is intended to pair with my second generation 48 -> 12V [intermediate bus
 converter](https://github.com/azonenberg/common-ibc) and also be used for bringup/validation testing of it, so it
@@ -99,7 +100,7 @@ up a 64-bit burst into two 32-bit transactions. 32-bit read and write accesses a
 propagation; 16 and 8 bit accesses are mostly implemented but thorough testing has been low priority since most
 of my peripherals have native 32-bit registers anyway.
 
-(image here)
+[![Block diagram showing AXI bus within STM32, APB bus within FPGA, and bridge via the FMC](/assets/fpga-mcu-block.png)](/assets/fpga-mcu-block.png)
 
 The FPGA design (implemented in SystemVerilog) contains:
 
@@ -161,24 +162,24 @@ interrupt line of some sort that will trigger a "you done segfaulted" ISR on the
 APB #(.DATA_WIDTH(32), .ADDR_WIDTH(20), .USER_WIDTH(0)) fmc_apb();
 
 FMC_APBBridge #(
-	.CLOCK_PERIOD(7.27),	//137.5 MHz
-	.VCO_MULT(8),			//1.1 GHz VCO
-	.CAPTURE_CLOCK_PHASE(-30),
-	.LAUNCH_CLOCK_PHASE(-30)
+    .CLOCK_PERIOD(7.27),    //137.5 MHz
+    .VCO_MULT(8),           //1.1 GHz VCO
+    .CAPTURE_CLOCK_PHASE(-30),
+    .LAUNCH_CLOCK_PHASE(-30)
 ) fmcbridge(
-	.apb(fmc_apb),
+    .apb(fmc_apb),
 
-	.clk_mgmt(clk_125mhz),
+    .clk_mgmt(clk_125mhz),
 
-	.fmc_clk(fmc_clk),
-	.fmc_nwait(fmc_nwait),
-	.fmc_noe(fmc_noe),
-	.fmc_ad(fmc_ad),
-	.fmc_nwe(fmc_nwe),
-	.fmc_nbl(fmc_nbl),
-	.fmc_nl_nadv(fmc_nl_nadv),
-	.fmc_a_hi(fmc_a_hi),
-	.fmc_cs_n(fmc_ne1)
+    .fmc_clk(fmc_clk),
+    .fmc_nwait(fmc_nwait),
+    .fmc_noe(fmc_noe),
+    .fmc_ad(fmc_ad),
+    .fmc_nwe(fmc_nwe),
+    .fmc_nbl(fmc_nbl),
+    .fmc_nl_nadv(fmc_nl_nadv),
+    .fmc_a_hi(fmc_a_hi),
+    .fmc_cs_n(fmc_ne1)
 );
 {% endhighlight %}
 
@@ -205,7 +206,7 @@ APB #(.DATA_WIDTH(32), .ADDR_WIDTH(16), .USER_WIDTH(0)) rootAPB[1:0]();
 
 //Root bridge
 APBBridge #(
-	.BASE_ADDR(32'h0000_0000),	//MSBs are not sent over FMC so we set to zero on our side
+	.BASE_ADDR(32'h0000_0000),	//MSBs are not sent over FMC
 	.BLOCK_SIZE(32'h1_0000),
 	.NUM_PORTS(2)
 ) root_bridge (
@@ -243,14 +244,22 @@ the packet buffers and all of the internal data structures used by the TCP/IP st
 With the FMC clocked at 125 MHz and both PLL clock phases set to -30 degrees (after BUFG insertion delay), my current
 test firmware can sustain 284 Mbps over a ten-second test.
 
-(image here)
+![iperf3 screenshot showing 284 Mbps of UDP traffic](/assets/iperf3.png)
 
-(TODO can we make it faster)
+There's probably potential to go faster, the FMC can clock to double the current rate (250 MHz) but I had trouble
+getting reliable performance. On my next "real" design I'll have a faster FPGA (although potentially slower IOs,
+UltraScale+ HDIO are actually somewhat slow compared to 7 series HR) and may spend some time playing with constraints
+and PLL phases to see if I can push it any further. But realistically, this is already more than enough for my needs.
 
 ## Conclusions
 
 Overall this was surprisingly painless. The interface just works, with almost no fuss. Pushing to higher clock rates
 (past 125 MHz) is likely to be a bit challenging due to the system-synchronous nature of the bus. I played around a bit
 with dynamic PLL reconfiguration and some ideas for link trainining of sorts, but honestly I don't think it's
-necessary. It's more than fast enough for my use case.
+necessary.
 
+I expect the code will evolve slightly over time, perhaps eventually adding 64-bit transfer support on the FMC side and
+bridging to AHB rather than APB for reduced overhead of sequential transfers, but this is likely to be the backbone of
+my large FPGA+MCU projects for the foreseeable future.
+
+Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/112845173275261011)
