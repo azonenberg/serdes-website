@@ -261,4 +261,4 @@ the wrong address).
 Now it's time to move on to the next part of the project queue, assembling the new 48V IBC board and doing a bunch of
 decidedly not-fast power management firmware on the IBC as well as the supervisor MCU on the test board.
 
-Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/fixme)
+Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/112863229009130266)
