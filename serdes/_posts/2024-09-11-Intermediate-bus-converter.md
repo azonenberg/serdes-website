@@ -55,8 +55,8 @@ This design set the general stage for all of the subsequent designs, and all fut
 
 The input protection and power path was pretty straightforward: a socketed fuse at the input, common mode choke and
 ferrite bead to avoid radiating switching noise out the input, a current shunt and some bulk capacitors, then a
-TDK-Lambda i3a series buck module. No explicit reverse voltage or overvoltage protection, although something would
-probably blow the input fuse if reversed.
+[TDK-Lambda i3a series](url fixme) buck module. No explicit reverse voltage or overvoltage protection, although
+something would probably blow the input fuse if it were reversed.
 
 On the output side of the buck module, there's a bunch more capacitace, a current shunt, a ferrite, an an On Semi
 NCP455620 controlled-slew load switch.
@@ -65,11 +65,63 @@ In parallel with the main power path I put a 3.3V LDO to run the management logi
 the 48 and 12V voltage levels, plus a pair of AD8218 current shunt amplifiers to convert the shunt readings to voltages
 I could feed to the MCU (a STM32L031).
 
-# Version 0.2
+## Version 0.2
 
 The v0.1 IBC had one major problem: one of the tracks from the output of the buck module to the first capacitor was an
 0.125mm track that was supposed to be a marker for an eventual zone fill, but I never added the copper pour! It
 functioned fine once I bodged a piece of copper wire across this path.
 
-The v0.1 IBC worked well from a power perspective, but gave very noisy measurements. After a bit of digging I realized
-the problem: the ADC bandwidth was high enough that it was picking up switching ripple through the current shunts.
+It worked well enough from a power perspective, but gave very noisy current measurements. After a bit of digging I
+realized the problem: the ADC bandwidth was high enough that it was picking up switching ripple through the current
+shunts.
+
+So I made [version 0.2](https://github.com/azonenberg/triggercrossbar/commit/86d453562fa778c61102268df635efaaf52559ad)
+which fixed the missing zone fill and added a low-pass filter between the current shunt amplifiers and the MCU ADC.
+
+## Version 0.3
+
+After this fix, everything worked great except that I realized I had derped and put the 48V current shunt in a high
+dI/dT path causing it to pick up switching noise.
+
+So I made [version 0.3](https://github.com/azonenberg/triggercrossbar/commit/5c2349a092faf42c51e111837561bafba4da2d51),
+the final iteration of the first generation IBC. As of this writing, this is the version powering my trigger crossbar
+prototype (although I plan to swap it for a v0.5 at some point).
+
+## Version 0.4
+
+The i3a module had one major problem: efficiency. It ran *hot* (necessitating forced air cooling even at fairly light
+loads), and its ~3W idle power unloaded resulted in awful efficiency at the ~10W output levels required by the trigger
+crossbar.
+
+While exploring alternatives, I came across the Murata MYC0409. This is a rather unique switching DC-DC architecture in
+that it doesn't use an inductor like a typical buck converter. Instead, it uses a charge pump and switches a series of
+capacitors around.
+
+This has one significant downside: it produces an unregulated, ratiometric output that is a fixed integer division of
+the input. Essentially it consists of a series of switching transistors and four internal capacitors; they are
+connected in series and allowed to charge off the input supply then connected in parallel and allowed to discharge into
+the load.
+
+But this isn't a huge deal for a converter intended to primarily drive fans and other DC-DC converters, and the ~800 mW
+idle power consumption was a huge draw compared to the i3a.
+
+I also took this opportunity to move [version
+0.4](https://github.com/azonenberg/common-ibc/commit/5b499dcd155f62d37ded7c80afa6a95ef9ada696) to its own repository
+since it's a common component, not part of the trigger crossbar project.
+
+The legacy v0.1-0.3 line still lives in the trigger crossbar repo but will be deleted once I retire the last v0.3 board
+on my bench to avoid clutter; I can always look back at git history if I have some need to do so.
+
+## Version 0.5
+
+## Version 0.6 coming?
+
+As of now, v0.5 is current. There's one minor annoyance, the 3.3V standby rail switcher is fed by the 12V output
+*after* the ferrite bead, and could perhaps do with a small input capacitor to reduce high frequency transients. The
+end result is that there's high frequency switching spikes injected into the 12V rail. Measuring with a current probe
+shows no corresponding spikes in current drawn by the load (unsurprising) so I don't think this will have a huge impact
+on EMC and I'm just doing prototypes at this stage anyway.
+
+My current plan is to use up all ten of the v0.5 boards I've built making protos of various equipment, then when I run
+out do a v0.6 spin with this fix and any other EMC or performance related tweaks I might want to make after having used
+the thing for a while in the lab.
