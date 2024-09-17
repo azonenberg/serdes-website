@@ -110,9 +110,20 @@ I also took this opportunity to move [version
 since it's a common component, not part of the trigger crossbar project.
 
 The legacy v0.1-0.3 line still lives in the trigger crossbar repo but will be deleted once I retire the last v0.3 board
-on my bench to avoid clutter; I can always look back at git history if I have some need to do so.
+on my bench to avoid clutter in my working copies; I can always look back at git history if I have some need to do so.
 
 ## Version 0.5
+
+v0.4 had a few teething troubles. For starters, when I applied power it blew up.
+
+More precisely, the LTC4367 did. It looks like when power was first applied I started getting a bit of current going
+down the supply leads, through the input side common mode choke that I had put there to suppress potential common mode
+EMI, hit the LTC4367 input, then it had nowhere to go since there wasn't much input capacitance upstream. The end
+result was inductive spikes peaking at close to 100V amplitude which was enough to cause the LTC4367 to pop. I tried a
+few fixes without success, then simply removed the entire input protection subsystem to test, at which point it
+worked like a charm.
+
+So I made one final version 0.5 which removed the CMC and LTC4367 in favor of a ferrite and TPS16630.
 
 ## Version 0.6 coming?
 
