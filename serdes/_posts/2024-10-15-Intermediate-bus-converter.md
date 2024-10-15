@@ -110,6 +110,10 @@ the load.
 But this isn't a huge deal for a converter intended to primarily drive fans and other DC-DC converters, and the ~800 mW
 idle power consumption was a huge draw compared to the i3a.
 
+As part of the revamp, I switched from the STM32L031 to the L431 in order to get more flash so I could support a
+bootloader and A/B firmware slots, enabling field updates if that ever became necessary. The 32 kB of the L031 was a
+little small to fit two copies of the firmware plus a bootloader.
+
 I also took this opportunity to move [version
 0.4](https://github.com/azonenberg/common-ibc/commit/5b499dcd155f62d37ded7c80afa6a95ef9ada696) to its own repository
 since it's a common component, not part of the trigger crossbar project.
@@ -117,13 +121,13 @@ since it's a common component, not part of the trigger crossbar project.
 The legacy v0.1-0.3 line still lives in the trigger crossbar repo history, but I have no plans to continue development
 of it at this time.
 
-[![Blue PCB densely populated with large polymer capacitors and power connectors, with a common mode choke in the northeast corner](/assets/ibc-v0p4.png)](/assets/ibc-v0p4.png)
+[![Blue PCB densely populated with large polymer capacitors and power connectors, with a common mode choke in the northeast corner](/assets/ibc-v0p4.jpg)](/assets/ibc-v0p4.jpg)
 
 ## Version 0.5
 
 v0.4 had a few teething troubles. For starters, as soon as I applied power it exploded.
 
-[![DFN packaged LTC4367 on PCB with an obvious crater near pin 1 where the magic smoke escaped](/assets/blown-4367-800.png)](/assets/blown-4367.png)
+[![DFN packaged LTC4367 on PCB with an obvious crater near pin 1 where the magic smoke escaped](/assets/blown-4367-800.jpg)](/assets/blown-4367.jpg)
 
 More precisely, the LTC4367 did. It looks like when power was first applied I started getting a bit of current going
 down the supply leads, through the input side common mode choke that I had put there to suppress potential common mode
@@ -144,9 +148,11 @@ I saved the blown LTC4367s and will try to decap them at some point and see if t
 If it's not too expensive I'll try to get one X-rayed or even CT scanned, it'll be cool to see what happend to the pin
 1 bond wire and how much carnage is inside the package.
 
-So I made one final version 0.5 which removed the CMC and LTC4367 in favor of a ferrite and TPS16630.
+So I made one final [version 0.5](https://github.com/azonenberg/common-ibc/commit/df354996e38ef2ef96414c5ddc9e1eb1ac11a156)
+which removed the CMC and LTC4367 in favor of a ferrite and TPS16630. This version also adds a few more TVS diodes and
+other protections against overvoltage and ESD.
 
-[![Blue PCB densely populated with large polymer capacitors and power connectors](/assets/ibc-v0p5.png)](/assets/ibc-v0p5.png)
+[![Blue PCB densely populated with large polymer capacitors and power connectors](/assets/ibc-v0p5-800.jpg)](/assets/ibc-v0p5.jpg)
 
 This version works great and is on one of my prototype boards now, and I will probably be building a few more for
 testing soon.
@@ -217,4 +223,4 @@ and can scale to multiple converters if I need even more power handling capacity
 But for now, it's going to be powering most of my large prototypes moving forward. Look forward to seeing it appearing
 in lots of projects coming up!
 
-Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/FIXME)
+Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/113310203578285998)
