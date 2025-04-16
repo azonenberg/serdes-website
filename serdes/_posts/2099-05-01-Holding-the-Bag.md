@@ -60,7 +60,7 @@ Bob continued interviewing the locals. Theories ranged from a secret government 
 
 As the TV droned on and on, failing to reveal any useful information other than "it's a big black box", she fell back asleep.
 
-## Freedom
+## Going Home
 
 Lynn rolled down the hallway of the hospital on her scooter. It had been a difficult couple of days, but she had been cleared for discharge.
 
@@ -84,4 +84,20 @@ He started the car and threw it into gear. There was a disconcerting rattling no
 
 "Wait, there's more than one now???" she asked.
 
-"Yeah, another one popped up a day later right in the middle of a house in Costa Rica. Looked like it got hit by a tornado. Luckily nobody was home."
+"Yeah, another one popped up a day later right in the middle of a house in Costa Rica. Looked like it got hit by a tornado. Luckily nobody was home. And some guy on the internet browsing aerial photos found another in the Mojave. Who knows how long it's been there. So that's three that we know about so far. There might well be more in uninhabited areas that nobody's found yet."
+
+"Wow. OK, what do we know about them?"
+
+"Not a whole lot. They're very heavy, nobody's managed to move one of them yet. They absorb every wavelength of light or RF we've thrown at them so far and radiate weakly around 30ish GHz. The spectrum looks just like you'd expect from an ideal black-body... with a temperature of around 2.7K rather than ambient. No idea if they're solid or hollow or what they're made of. The governor set up a task force to focus on this one and several of us have been asked to participate. They want you involved too, once you're feeling up to it."
+
+"Wait, 2.7K? 30 GHz? That sounds like the cosmic microwave background."
+
+"Yep," Abe replied. "We have no idea if that's a coincidence or if there's some kind of connection somehow."
+
+He pulled Betsy to the side of the road. "This is your place, right?"
+
+"Yep, that's it. Thanks a lot!"
+
+"Any time. Dr. Chan said you had an 8AM lecture tomorrow so I'll see you 7:30ish?"
+
+"Sounds good. See you tomorrow."
