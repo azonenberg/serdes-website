@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Holding the Bag"
-date:   2099-05-01 23:00:00 -0700
+date:   2025-04-17 12:00:00 -0700
 ---
 
 This is a bit of a change from my usual content, but I've been sitting on this idea for a short SF story for a long time and I had to try to actually writing it. I'm mostly a technical writer not a creative one so hopefully this turned out decently :)
@@ -239,3 +239,5 @@ The Secretary of Defense chimed in "Never been into that stuff. What are you get
 "Yes, precisely. We checked historical satellite photos, the one in the Mojave has been there for years and nobody ever got close enough to know it was there. It must have been the prototype, and now they've started mass production. It's not going to stop until we find a way to get a message across to whatever parallel universe is building these things and hope they're willing to shut down their Bag of Holding factory."
 
 The President sighed. "And we're the ones left holding the bag."
+
+Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/FIXME)
