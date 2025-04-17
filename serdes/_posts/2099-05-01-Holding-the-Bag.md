@@ -20,7 +20,7 @@ MIT had been hit harder than some other institutions, with the endowment losing 
 
 The job at Rensselaer Polytechnic was a pay cut and meant starting over as an associate professor teaching freshmen about Newton's laws rather than working in the cleanroom on cutting-edge research, but it would put food on the table and a roof over her head. And it beat stocking shelves overnight at the Cambridge Wal-Mart like her former department head.
 
-After breakfast she grabbed her helmet and tire pump and went down to the garage to get her bike ready for the morning commute, checking the map for what felt like the 20th time to make sure she had the route memorized. Being delayed by a flat tire or making a wrong turn on the way to the first day of classes would be an embarrassing start to the new job. And she wanted to allow plenty of time for the trip until she got back in shape. Years of desk work and car commuting had let her once-athletic legs weaken, but she had sold the car over the summer to pay for groceries and there was no bus service to her new neighborhood (ta good thing - apartments with transit access were more expensive) so it was the only option left.
+After breakfast she grabbed her helmet and tire pump and went down to the garage to get her bike ready for the morning commute, checking the map for what felt like the 20th time to make sure she had the route memorized. Being delayed by a flat tire or making a wrong turn on the way to the first day of classes would be an embarrassing start to the new job. And she wanted to allow plenty of time for the trip until she got back in shape. Years of desk work and car commuting had let her once-athletic legs weaken, but she had sold the car over the summer to pay for groceries and there was no bus service to her new neighborhood (a good thing - apartments with transit access were more expensive) so it was the only option left.
 
 As she rode down the hill towards campus, she tried to enjoy the view of the distant Hudson river as cars zipped past her every few seconds. Biking to work was going to take some getting used to.
 
@@ -38,7 +38,7 @@ Lynn woke up in a daze and looked around the room. Her left leg was in a cast an
 
 "Oh, you must not remember what happened. That's a normal mental reaction to traumatic events. Don't worry, it's not brain damage or anything - your MRI came back fine and there's no sign of a concussion."
 
-The nurse reached over for the bedside TV remote and turned it on. A local news anchor stood in front of a video wall showing a helicopter view of Hoosick Street. But where there should have been a traffic light and four-way intersection a few blocks from the school, there was nothing but blackness. It appeared perfectly square and featureless, not even reflecting the lights of the tow trucks and police cars blocking the road, removing the debris of what was clearly a massive multi-car pileup.
+The nurse reached over for the bedside TV remote and turned it on. A local news anchor stood in front of a video wall showing a helicopter view of Hoosick Street. But where there should have been a traffic light and four-way intersection a few blocks from the school, there was nothing but blackness. It appeared perfectly square and featureless, not even reflecting the lights of the tow trucks and police cars blocking the road as they removed the debris of what was clearly a massive multi-car pileup.
 
 "Thankfully there were no fatalities, but over a dozen drivers and a cyclist were hospitalized after the Cube appeared in the middle of the road during the morning rush hour. The area has been blocked off by the FBI who refused to comment when our reporter asked them if they had any idea what the object was or where it had come from."
 
@@ -140,7 +140,7 @@ Approaching the tent, they were greeted by an elderly Asian man. "Paul Chan. I'm
 
 "Particle radiation?"
 
-"Nothing. Alpha and beta detectors show nothing but noise, not even normal Earth-surface background levels. We've tried irradiating it in a few spots and got nothing detectable transmitted or reflected."
+"Nothing. Alpha, beta, and neutron detectors show nothing but noise, not even normal Earth-surface background levels. We've tried irradiating it in a few spots and got nothing detectable transmitted or reflected."
 
 "And what about the EM side?"
 
@@ -194,7 +194,7 @@ Dr. Chan and several other grad students approached Lynn's desk with a whiteboar
 
 "Our working theory is that the 'wall' isn't a wall at all. It's a jump discontinuity in space-time. Matter can't pass through it because there's an undefined slope rather than a smooth curve like you get around a normal point mass. You'd need an infinite force to push over the edge. EM fields get diffracted out into deep space, so anything you send in vanishes and all you see coming out is the CMB."
 
-"But then why are seeing transmitted signal?"
+"But then why are we seeing transmitted signal?"
 
 "There's a second discontinuity about 60 microns away from the first one, acting like a liner. The Cube is hollow. If your incident signal has a wavelength exactly matching the spacing of the discontinuities, it acts like a very high Q cavity resonator, almost like a laser. When you've pumped the cavity hard enough, the field strength gets to the point some of the energy can jump the discontinuity and enter the interior of the Cube. Presumably something similar happens on the exit side but we're still working on how that bit works."
 
@@ -238,4 +238,4 @@ The Secretary of Defense chimed in "Never been into that stuff. What are you get
 
 "Yes, precisely. We checked historical satellite photos, the one in the Mojave has been there for years and nobody ever got close enough to know it was there. It must have been the prototype, and now they've started mass production. It's not going to stop until we find a way to get a message across to whatever parallel universe is building these things and hope they're willing to shut down their Bag of Holding factory."
 
-"And we're the ones left holding the bag."
+The President sighed. "And we're the ones left holding the bag."
