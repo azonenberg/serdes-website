@@ -128,7 +128,7 @@ Approaching the tent, they were greeted by an elderly Asian man. "Paul Chan. I'm
 
 "So what do we know so far? Anything on surface characterization yet?"
 
-"The surface is perfectly flat, within the limits of our measurement capability. There's no tunneling current whatsoever in a STM, and the AFM showed no deviation at all, not even on the atomic scale. HOPG looks like sandpaper compared to this. We're not even sure it's a physical surface, it might just be some kind of energy field. Somebody volunteered to touch it with a bare hand and they said it felt like nothing, their hand just stopped but it didn't feel hot or cold or rough or... anything."
+"The surface is perfectly flat, within the limits of our measurement capability. There's no tunneling current whatsoever in a STM, and the AFM showed no deviation at all, not even on the atomic scale. HOPG looks like sandpaper compared to this. We're not even sure it's a physical surface, it might just be some kind of energy field. Somebody volunteered to touch it with a bare hand and they said it felt like nothing, their hand just stopped but it didn't feel hot or cold or rough or... like anything besides just sitting there in open air."
 
 "Ultrasound?"
 
@@ -149,3 +149,27 @@ Approaching the tent, they were greeted by an elderly Asian man. "Paul Chan. I'm
 Lynn sat down with her laptop and pulled up her notes from the nearly-forgotten project to refresh her memory.
 
 ## Progress
+
+"We got something on the last sweep!"
+
+Lynn looked up as Abe ran excitedly up to her desk. It had been four weeks and two rushed wafer lots, but the new THz detector prototypes were in operation, part of an ongoing global campaign to try and see inside the Cube or determine what it was made of and where it came from by any means possible.
+
+"What?"
+
+"Yeah. Extremely narrow transmission peak right around 120 micron wavelength - 2.5 THz. They're setting the detector to do a 360 degree scan and see if there's any spatial pattern but I thought you'd want to know."
+
+She got up and walked into the RF chamber surrounding the Cube. Between the featureless black surface and the thousands of sharp pyramidal RF absorber cones lay a narrow circular track with two wheeled carts, 180 degrees apart. One held a high-power transmitter with heavy power cables dangling from the back. The other held her experimental detector, wired to a complicated ensemble of electronics. The entire setup was clearly thrown together in a hurry - boards screwed to frames made from 2x4 lumber, hand soldered jumper wires to fix missing connections, and cables secured to the frame with duct tape.
+
+"Lynn! You're just in time!" exclaimed Dr. Chan. "We're all set up, let's clear the chamber and see what we get."
+
+Everyone walked out of the chamber and over to the control desk on the far side of the wall. Abe closed the door and sat down at the bench as the rest of the team crowded around.
+
+"I've been playing around with some open source CT scanning software and I think I've got a 2D slice processing flow working. Let's see if we have enough power to see anything..."
+
+He clicked the "start" button. A slight humming noise came from the power transformer outside and the lights dimmed briefly, then a graph began to slowly trace along the screen. As the scan finished, there was a short pause, then a grainy black and white image appeared below the graph.
+
+"Well, it's not solid," Lynn said. "Definitely looks artificially constructed, too."
+
+A regular grid pattern of small squares was visible in the image. In between the grid points, smaller rectangular and circular objects, as well as some more irregular blobs, could be seen.
+
+"But what's special about this frequency? And what is this structure?"
