@@ -24,7 +24,7 @@ After breakfast she grabbed her helmet and tire pump and went down to the garage
 
 As she rode down the hill towards campus, she tried to enjoy the view of the distant Hudson river as cars zipped past her every few seconds. Biking to work was going to take some getting used to.
 
-Lost in thought, she didn't even notice her view of the river vanish in a wall of blackness until the squealing of brakes and crunching of metal front of her shattered her daydream. A fraction of a second later, the cacophony was drowned out by pain and confusion as she flew over the handlebars into something hard.
+Lost in thought, she didn't even notice her view of the river vanish in a wall of blackness until the squealing of brakes and crunching of metal in front of her shattered her daydream. A fraction of a second later, the cacophony was drowned out by pain and confusion as she flew over the handlebars into something hard.
 
 ## The Cube
 
