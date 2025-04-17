@@ -176,4 +176,38 @@ A regular grid pattern of small squares was visible in the image. In between the
 
 "Abe, work with the lab techs to get us an elevation axis so we can do full 3D reconstructions. That will tell us a lot. Dr. Chan, take the S21 sweep over to the theory folks and let them stew on it for a while. This is the only spot we've seen any transmission at all, even if it's attenuated by 90 dB. I want to know what's special about it."
 
-Lynn sat down at her desk and stared at the grid image. It reminded her of something but she couldn't place it.
+Lynn sat down at her desk and stared at the grid image. It reminded her of something familiar but she couldn't place it.
+
+## Answers
+
+"We think we know what the walls are!"
+
+Dr. Chan and several other grad students approached Lynn's desk with a whiteboard in tow.
+
+"So, the blackbody spectrum was the big clue. It *is* cosmic microwave background radiation."
+
+"But how could that be?" she asked. "It's sitting right here, not in deep space."
+
+"Our side of the discontinuity is, yes. But after that..."
+
+"Discontinuity? What are you talking about?"
+
+"Our working theory is that the 'wall' isn't a wall at all. It's a jump discontinuity in space-time. Matter can't pass through it because there's an undefined slope rather than a smooth curve like you get around a normal point mass. You'd need an infinite force to push over the edge. EM fields get diffracted out into deep space, so anything you send in vanishes and all you see coming out is the CMB."
+
+"But then why are seeing transmitted signal?"
+
+"There's a second discontinuity about 60 microns away from the first one, acting like a liner. The Cube is hollow. If your incident signal has a wavelength exactly matching the spacing of the discontinuities, it acts like a very high Q cavity resonator, almost like a laser. When you've pumped the cavity hard enough, the field strength gets to the point some of the energy can jump the discontinuity and enter the interior of the Cube. Presumably something similar happens on the exit side but we're still working on how that bit works."
+
+"So if it's hollow, what's inside?"
+
+"You're... not going to believe this," said Abe, walking in with a laptop. "The 3D reconstruction is done."
+
+Everyone stared in amazement as Abe tilted the point cloud slightly and the structure became clear: open aisles, separated by rows of rectangular shelving with fuzzy objects of various sizes resting on them.
+
+"The grid of squares we saw on the 2D slice were the support pillars of these shelves. And it's not static, either. I went back to the 1-meter elevation slice we did last week and several new objects are here that weren't there before."
+
+"But... That would mean someone or something is going in and out of the Cube! We've had it completely surrounded the whole time," Dr. Chan replied.
+
+"Yes, on our side of the discontinuity, " Abe said. "We don't know how static it is. It's very possible that it can slide around somehow, maybe opening up some kind of portal if you're in the right spot."
+
+Lynn's face turned pale as the implications sunk in. "Get me the President."
