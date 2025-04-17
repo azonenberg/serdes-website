@@ -240,4 +240,4 @@ The Secretary of Defense chimed in "Never been into that stuff. What are you get
 
 The President sighed. "And we're the ones left holding the bag."
 
-Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/FIXME)
+Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/114355284547649839)
