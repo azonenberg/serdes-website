@@ -4,7 +4,7 @@ title:  "Holding the Bag"
 date:   2025-04-17 12:00:00 -0700
 ---
 
-This is a bit of a change from my usual content, but I've been sitting on this idea for a short SF story for a long time and I had to try to actually writing it. I'm mostly a technical writer not a creative one so hopefully this turned out decently :)
+This is a bit of a change from my usual content, but I've been sitting on this idea for a short SF story for a long time and I had to try actually writing it. I'm mostly a technical writer not a creative one so hopefully this turned out decently :)
 
 ## Arrival
 
