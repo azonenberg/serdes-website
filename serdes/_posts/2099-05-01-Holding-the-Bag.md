@@ -172,4 +172,8 @@ He clicked the "start" button. A slight humming noise came from the power transf
 
 A regular grid pattern of small squares was visible in the image. In between the grid points, smaller rectangular and circular objects, as well as some more irregular blobs, could be seen.
 
-"But what's special about this frequency? And what is this structure?"
+"But what's special about this frequency? And what is this structure?" Abe wondered out loud.
+
+"Abe, work with the lab techs to get us an elevation axis so we can do full 3D reconstructions. That will tell us a lot. Dr. Chan, take the S21 sweep over to the theory folks and let them stew on it for a while. This is the only spot we've seen any transmission at all, even if it's attenuated by 90 dB. I want to know what's special about it."
+
+Lynn sat down at her desk and stared at the grid image. It reminded her of something but she couldn't place it.
