@@ -62,7 +62,7 @@ As the TV droned on and on, failing to reveal any useful information other than 
 
 ## Going Home
 
-Lynn rolled down the hallway of the hospital on her scooter. It had been a difficult couple of days, but she had been cleared for discharge.
+Lynn rolled down the hallway of the hospital with her broken leg on a scooter. It had been a difficult couple of days, but she had been cleared for discharge.
 
 "Professor?"
 
@@ -88,11 +88,11 @@ He started the car and threw it into gear. There was a disconcerting rattling no
 
 "Wow. OK, what do we know about them?"
 
-"Not a whole lot. They're very heavy, nobody's managed to move one of them yet. They absorb every wavelength of light or RF we've thrown at them so far and radiate weakly around 30ish GHz. The spectrum looks just like you'd expect from an ideal black-body... with a temperature of around 2.7K rather than ambient. No idea if they're solid or hollow or what they're made of. The governor set up a task force to focus on this one and several of us have been asked to participate. They want you involved too, once you're feeling up to it."
+"Not a whole lot. They're very heavy, nobody's managed to move one of them yet. They completely absorb every wavelength of light or RF we've thrown at them so far and radiate weakly around 30ish GHz. The spectrum looks just like you'd expect from an ideal black-body... with a temperature of around 2.7K rather than ambient. No idea if they're solid or hollow or what they're made of. The governor set up a task force to focus on this one and several of us have been asked to participate. They want you involved too, once you're feeling up to it."
 
 "Wait, 2.7K? 30 GHz? That sounds like the cosmic microwave background."
 
-"Yep," Abe replied. "We have no idea if that's a coincidence or if there's some kind of connection somehow."
+"Definitely similar," Abe replied. "We have no idea if that's a coincidence or if there's some kind of connection somehow."
 
 He pulled Betsy to the side of the road. "This is your place, right?"
 
@@ -101,3 +101,51 @@ He pulled Betsy to the side of the road. "This is your place, right?"
 "Any time. Dr. Chan said you had an 8AM lecture tomorrow so I'll see you 7:30ish?"
 
 "Sounds good. See you tomorrow."
+
+## The Lab
+
+HONK HONK
+
+Lynn opened her front door and saw Abe waving at her from Old Betsy.
+
+"Morning! Need a hand?"
+
+"No, I gotta get used to moving on my own if I want to be getting anything done for the... what's it called again?"
+
+"Well, it was the NY Cube Task Force. But overnight one of them dropped in a village in Siberia, another in some Greek farm, and then one flattened a factory in Shenzhen squishing a bunch of workers. Now it's the UN Cube Task Force. No changes to field operations, just means we're sharing data more widely. Class is canceled, we're going straight to the lab. You're taking over as Director of THz Studies, leading all of the characterization work between 100 GHz and 20 micron far infrared."
+
+"That's quite the promotion from associate professor," she replied. "How did I get picked and not somebody else?"
+
+"You're new here, but you've done more work with high-sensitivity THz imaging sensors than anybody else. This thing is such a good absorber that we might have to fabricate custom detectors to see anything."
+
+A block later they pulled into the Price Chopper parking lot. Traffic had been rerouted around the back of the store to bypass the Cube, which was now hidden from view under a large tent.
+
+Approaching the tent, they were greeted by an elderly Asian man. "Paul Chan. I'm Abe's advisor. You must be Lynn."
+
+"Nice to meet you. You've got quite the setup here, mind giving us the overview?"
+
+"The Cube is such a good absorber that we're doing everything we can to improve SNR," he replied. "There's a full Faraday cage around it with >100 dB of attenuation from a few hundred kHz to ultraviolet - building that in 48 hours wasn't cheap but we pulled it off. We have cryo-cooled panels we can move around it to reduce black-body radiation from the cage itself, although they do reflect in other frequency bands so we only use them when necessary. The foam is pretty decent at acoustic shielding too but we have sound absorbing panels we can use to supplement. All of the analysis and data processing is done from outside the cage so we don't disturb the measurements."
+
+"So what do we know so far? Anything on surface characterization yet?"
+
+"The surface is perfectly flat, within the limits of our measurement capability. There's no tunneling current whatsoever in a STM, and the AFM showed no deviation at all, not even on the atomic scale. HOPG looks like sandpaper compared to this. We're not even sure it's a physical surface, it might just be some kind of energy field. Somebody volunteered to touch it with a bare hand and they said it felt like nothing, their hand just stopped but it didn't feel hot or cold or rough or... anything."
+
+"Ultrasound?"
+
+"Zilch. No reflection or transmission at all, it's as if we're broadcasting into a vacuum."
+
+"Gravitation?"
+
+"Hard to measure on earth, obviously. But between the fact that we haven't been able to move it, and it's not sucking things up like a black hole or sinking into the ground, we're guesstimating a mass of somewhere in the 20K to 500K ton range. Our geologists say that the bedrock is pretty deep under this intersection and none of the buried sewer lines seem to have been crushed, so probably towards the lower end of that."
+
+"Particle radiation?"
+
+"Nothing. Alpha and beta detectors show nothing but noise, not even normal Earth-surface background levels. We've tried irradiating it in a few spots and got nothing detectable transmitted or reflected."
+
+"And what about the EM side?"
+
+"So far, not a whole lot but we've got further there than anywhere else. It emits what appears to be uniform black-body radiation, so that's something. We're trying to get the most sensitive detectors we can across the entire EM band in hopes of getting some level of modulation back that we can detect. Some of them have long lead times that are hard to accelerate, so we're trying to use cooled detectors and strong transmitters to improve SNR as much as practical in the meantime. We were hoping you might be able to continue the THz focal plane array work from your IEEE paper last year, it looks like it will outperform anything we've got north of 100 GHz and CNSE thinks they'll be able to fab prototypes pretty easily... And this is your new desk. Have at it, let me know if you need anything equipment or staff wise and we'll make it happen."
+
+Lynn sat down with her laptop and pulled up her notes from the nearly-forgotten project to refresh her memory.
+
+## Progress
