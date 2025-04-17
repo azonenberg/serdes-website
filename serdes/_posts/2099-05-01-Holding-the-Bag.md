@@ -211,3 +211,31 @@ Everyone stared in amazement as Abe tilted the point cloud slightly and the stru
 "Yes, on our side of the discontinuity, " Abe said. "We don't know how static it is. It's very possible that it can slide around somehow, maybe opening up some kind of portal if you're in the right spot."
 
 Lynn's face turned pale as the implications sunk in. "Get me the President."
+
+## The Bag
+
+"White House switchboard"
+
+"Lynn Clarke, NY Cube Task Force division. We have a problem."
+
+A few minutes of holding later, the phone clicked.
+
+"Situation Room duty officer here. I'm with the President, VP, and Secretary of Defense."
+
+"Mr. President, have you ever played Dungeons and Dragons?" she asked.
+
+After a second of incredulous laughter, he replied. "This better not get out before Election Day. But yes, I was a bit of a nerd in my Harvard days. What does this have to do with the Cube, though?"
+
+The Secretary of Defense chimed in "Never been into that stuff. What are you getting at?"
+
+"What about Dr. Who? The TARDIS? Just like the Bag of Holding from D&D, it's bigger on the inside than the outside."
+
+"So? This is a national emergency, not an RPG convention," the President responded angrily.
+
+"Did you ever stop and think about where all that stuff *goes*? The bag is bigger inside than outside, but that means there's a big storage room *somewhere*."
+
+"Are you saying what I think you're saying?"
+
+"Yes, precisely. We checked historical satellite photos, the one in the Mojave has been there for years and nobody ever got close enough to know it was there. It must have been the prototype, and now they've started mass production. It's not going to stop until we find a way to get a message across to whatever parallel universe is building these things and hope they're willing to shut down their Bag of Holding factory."
+
+"And we're the ones left holding the bag."
