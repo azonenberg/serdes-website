@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Switch project, part 1"
-date:   2025-05-07 22:00:00 -0700
+date:   2025-05-08 18:00:00 -0700
 ---
 
 One of my longest-running projects has been an open hardware Ethernet switch. This has been one of the key driving forces behind many of my other projects, such as ngscopeclient and the high speed probes. It was also the project that got me into high speed digital design.
@@ -11,6 +11,8 @@ So I figured it's time to kick off a series with a short writeup of where things
 ## Ancient history: The first switch
 
 The first generation never had a name, it was just called "open-gig-switch" or something in my subversion repository (this was circa 2012 before I was primarily running on git).
+
+I couldn't find any many-port gigabit switch ASICs that were suitable for an OSH project (i.e. purchasable in qty 1, no NDA needed for datasheet, etc). So an FPGA-based from-scratch design seemed the only option.
 
 [![Dark purple PCB with a mini USB port, quad RJ45, and Spartan-6 FPGA on it](/assets/old-switch-800.jpg)](/assets/old-switch.jpg)
 
@@ -72,7 +74,7 @@ Overall I got it to the point that it was functional, it could pass packets, it 
 
 The other major finding from LATENTPINK was that, at least the way I had architected the fabric, the XC7K160T was a bit cramped for my plans. While the 14+1 port design was comfortable, I didn't think it would be easy to fit a 24+2 port switch into it. The next largest 7-series part (the XC7K325T) was not available in the FBG484 package so I'd have to go up to FFG676, but more annoyingly it wasn't supported by the free Vivado edition (requiring a $3K software license) and was hugely more expensive ($2260 vs $435 as of this writing).
 
-Between these two cost adders, I'd be looking at a $5K increase in project cost to jump to the bigger FPGA and build one prototype. My long term goal was 96 ports, so to replace all of my legacy Cisco switches I'd be looking at $3K of software + 4*$2K = $11K *more* to build the entire batch of switches with the 325T vs the 160T. And this would be on top of the already high costs of doing 8-10 layer PCB fab in low volume, the PHYs and RJ45s, custom sheet metal work for the chassis, etc.
+Between these two cost adders, I'd be looking at a $5K increase in project cost to jump to the bigger FPGA and build one prototype. My long term goal was 96 ports, so to replace all of my legacy Cisco switches I'd be looking at $3K of software + 4x $2K = $11K *more* to build the entire batch of switches with the 325T vs the 160T. And this would be on top of the already high costs of doing 8-10 layer PCB fab in low volume, the PHYs and RJ45s, custom sheet metal work for the chassis, etc.
 
 By the time I was ready to start thinking about building LATENTRED seriously, though, it was 2024. 7 series was getting pretty long in the tooth and UltraScale and UltraScale+ had been out for a while.
 
@@ -100,16 +102,62 @@ The overall switch will consist of five, possibly six, PCBs:
 * Switch engine board with XCKU5P, STM32H735, management PHY, serial port, etc.
 * Possibly a separate board with the SFP28 uplinks connected to the switch engine by cables, depending on whether the chassis mechanical layout makes this easier than a monolithic design
 
+The original concept also had called for the line cards to be connected by rigid interconnects in a daisy-chain style (i.e. all SGMII/QSGMII lanes into one side, each line card would tap several lanes off to local PHYs and route the others out the other side). This would result in long multi-gigabit signals running across the full 19" chassis width through several connectors, likely requiring the use of a higher cost low-loss substrate.
+
+While browsing the Samtec catalog, though, I discovered the [AcceleRate](https://www.samtec.com/solutions/accelerate/) series, more specifically the AcceleRate Slim ARC6 (cable) / ARF6 (board) series. These are twinax differential interconnects with 8 to 24 differential pairs per cable and are rated for 32 Gbps NRZ or 64 Gbps PAM4, so the insertion loss performance is... only slightly overkill for 5 Gbps QSGMII links. One eight pair cable can handle the six pairs required for the three QSGMII lanes on a VSC8512 with two extra lanes to spare.
+
+The big advantage of a "flyover" style interconnect like this is that there's no need for a low loss PCB material or routing lots of diffpairs long distances that will conflict with other routing. Jut put a couple of connectors close to the BGA and leave the rest of the board area free for other stuff.
+
+ARC6 is also good enough I could use them as a flyover for a remote SFP28 connector if that makes the chassis layout easier.
+
 ### Current hardware state
 
-The IBC has been already designed and used in other projects, so that's done. We can forget about it, other than possibly doing that small respin with reduced ripple from the 3.3V buck. But with the current tariff situation I'm not in a hurry (it's a 4L 2oz board made at Multech in China).
+The IBC has been already designed and used in other projects, so that's done. We can forget about it, other than possibly doing that small respin with reduced ripple from the 3.3V buck. But with the current tariff situation I'm not in a hurry (it's a 4L 2oz board made at Multech in China). I have plenty of the boards and several populated units ready to go.
 
-The PDU board is done. There's not much to it: 12V in the left 8-pin connector, 12V out the right 8-pin, 12V out the bottom two 4-pins. It also passes the I2C and 3.3V standby rails from the IBC through, while tapping off them to run programmable soft load switching and voltage/current monitoring. Pretty straightforward.
+The PDU board is done. There's not much to it: 12V in the left 8-pin connector, 12V out the right 8-pin, 12V out the bottom two 4-pins. It also passes the I2C and 3.3V standby rails from the IBC through, while tapping off them to run programmable soft load switching and voltage/current monitoring. Pretty straightforward. I have three boards (one populated) so to get my 96 ports I only need to stuff a second one with some parts I have on the shelf.
 
 [![Purple PCB with four Molex Mini-Fit Jr power connectors and some passives](/assets/latentred-pdu-800.jpg)](/assets/latentred-pdu.jpg)
 
-The
+The line card is also done. I've built one and it seems to work fine aside from, if memory serves me right, port 22 or 23 not linking up. Probably a solder defect since the left/right PHY layout was basically copy pasted, but I haven't had time to troubleshoot. I have ten PCBs and need four to make two switches; I will have to order two more of the 8-port RJ45s from LINK-PP to stuff all of them but I'm a ways off from that being an issue.
+
+[![Blue PCB with three 8-port RJ45s and two large BGA PHYs,](/assets/linecard-800.jpg)](/assets/linecard.jpg)
+
+It's a six-layer design on cheap Shengyi S1000-2M substrate since the QSGMII links are short and everything else is slow. Stackup is SGPPGS with all of the Ethernet signals on the back layer and some of the LED GPIOs routed in between layer 4 power pours. Connection to the rest of the system is via four connectors on the back side: 12V power on a 4-pin Mini-Fit Jr, six QSGMII lanes split across two ARF6 connectors, and a 10-pin Molex PicoBlade providing access to the PHY MDIO bus, I2C to a bunch of system health sensors, and a SPI bus to the onboard STM32L431 management microcontroller (not used in current firmware) in case I want to provide remote power cycling or something like that.
+
+The big missing piece as of now is the switch engine board itself. For the near term I've cobbled together a sort of sub-scale test setup containing one line card, the power system, a KU5P dev board I built last year to validate that the $55 AliExpress FPGAs weren't bricks, and a separate board with a STM32H735 as the management processor.
+
+[![Bench setup with the line card, power supply, and FPGA dev board cabled together](/assets/latentred-dev-800.jpg)](/assets/latentred-dev.jpg)
+
+It wasn't possible to route a STM32H735 with FMC to the FPGA directly to enable the fast memory mapped interface I described in a [previous post](https://serd.es/2024/07/28/Memory-mapping-improvements.html) since the dev board was built on OSHPark 4 layer (I may be the first person to have put a Kintex UltraScale+, with all transceivers broken out, on a 4-layer PCB... post about that coming at some point) so instead I built a small expansion board with the MCU, a small bridge FPGA (XC7A35T), and connected it to the KU+ board via a 5 Gbps serial link. The MCU memory bus is bridged to APB on the Artix which then serializes the APB transactions via a simple PCIe-esque protocol (the Serial Chip to Chip Bus, which will probably get its own blog once I've fine tuned the implementation a bit) and back to APB on the Kintex. The end result is basically the same as if the MCU were directly wired to the Kintex but with a bit more latency in the path.
+
+The glue board also contains a passive adapter circuit to bridge from three sets of SMPM connectors on the Kintex board to an ARF6 connector so I can break out that GTY quad to talk to the line card. I have a second glue board that will bridge a QSFP28 out to an ARF6 (enabling me to use the second PHY on the line card) but haven't had time to assemble it yet.
 
 ## Planned switch engine architecture
 
+I'm still working out some of the fine points of the implementation, but the current overall plan is a 4x4 64-bit crossbar at 400 MHz. This will give 25.6 Gbps per lane of throughput, or 102.4 Gbps total. I could theoretically downclock to 390.625 MHz if needed due to difficult timing, but the increase in margin will be small and 400 is a more convenient number for me to synthesize from 25 MHz without needing fractional-N.
+
+The 25G uplinks will each get a dedicated crossbar port, while each line card will also get one (combined bandwidth 24 Gbps).
+
+The 4x4 crossbar should be very efficient and performant timing-wise, since a 4:1 mux fits in a single LUT6. So a 64-bit 4:1 mux is 64 LUTs and the full crossbar 256 LUTs, with only a single level of logic in the critical path. The decision-making logic will be more complex but can run in a slower clock domain if needed, since forwarding a packet will take multiple cycles.
+
+On the input side, there will need to be some kind of arbiter and some small FIFOs to take the 24x 1 Gbps streams and mux them down to a single 24 Gbps stream, as well as some clock domain crossing blocks that can probably be handled by the same FIFOs. UltraRAM is available if needed for deeper FIFOs.
+
+On the output side, there will just be a small block RAM exit queue per port. The 25G ports will drive the crossbar exit stream straight into the FIFO, while the 1G line cards will have 24 separate exit queues (one per port) with enable gated by the destination port set (a bitmask, to allow for broadcast/multicast).
+
+[![Block diagram of proposed switch architecture](/assets/latentred-block-800.png)](/assets/latentred-block.png)
+
 ## Current gateware state
+
+I successfully ported my existing 10G MAC/PCS IP over to AXI4-Stream and have it working well in tests. The 1G is almost done, the AXI conversion is finished for the RX side but I haven't done the TX yet.
+
+I still have to write a 25G MAC/PCS but that's a ways out, I can run the uplinks at 10G and test the whole rest of the switch just fine that way (I won't actually be lighting up the uplinks at 25G until I get a 25/100G core switch anyway, which is a ways out).
+
+The MAC address table from LATENTPINK will work just fine in this design with no modifications, it has more than enough capacity for the max theoretical number of packets I could push through the fabric.
+
+I still have to build AXI4-Stream VLAN tag insertion/removal blocks, figure out at what point I want to drop frames with bad FCSes (probably at the point they're written to the URAM ingress FIFO but I'm not certain yet), and actually do all the integrations.
+
+## Conclusions
+
+There's still a lot to do but it's been an exciting project so far and I look forward to seeing where it goes. I don't expect to have a polished switch on the final PCB/mechanical design until probably some time in 2026 (subject to manufacturing/supply chain delays and the political situation), but I hope to be pushing packets by the summer some time.
+
+Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/114475729954702418)
