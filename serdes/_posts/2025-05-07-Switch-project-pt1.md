@@ -118,7 +118,7 @@ The PDU board is done. There's not much to it: 12V in the left 8-pin connector, 
 
 [![Purple PCB with four Molex Mini-Fit Jr power connectors and some passives](/assets/latentred-pdu-800.jpg)](/assets/latentred-pdu.jpg)
 
-The line card is also done. I've built one and it seems to work fine aside from, if memory serves me right, port 22 or 23 not linking up. Probably a solder defect since the left/right PHY layout was basically copy pasted, but I haven't had time to troubleshoot. I have ten PCBs and need four to make two switches; I will have to order two more of the 8-port RJ45s from LINK-PP to stuff all of them but I'm a ways off from that being an issue.
+The line card is also done. I've built one and it seems to work fine aside from, if memory serves me right, port 22 or 23 not linking up. Probably a solder defect since the left/right PHY layout was basically copy pasted, but I haven't had time to troubleshoot. I have five PCBs and need four to make two switches; I will have to order two more of the 8-port RJ45s from LINK-PP to stuff all of them but I'm a ways off from that being an issue.
 
 [![Blue PCB with three 8-port RJ45s and two large BGA PHYs,](/assets/linecard-800.jpg)](/assets/linecard.jpg)
 
