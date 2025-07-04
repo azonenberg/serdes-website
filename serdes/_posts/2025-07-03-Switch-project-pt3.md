@@ -39,7 +39,9 @@ It's pretty easy to see that the VSC8512 is a nerfed switch ASIC. There's an ent
 
 The IBIS-AMI model included the magic name "Serdes6G". Searching for this turned up some additional docs, most notably AN3743 (DS00003743A) which purports to be about the VSC74xx / 84xx but seems to be describing something very similar to what's on the 8512.
 
-Between the various documents I was able to conclude that the VSC8512 is made on an unspecified 65nm process (I should decap one at some point and figure out whose, my guess is TSMC but I could be wrong). The SERDES macro was developed by the "German Design Center" (in the Dortmund area, according to some LinkedIn hits from a google search) - interesting to know, but not particularly useful in this context.
+Between the various documents I was able to conclude that the VSC8512 is made on an unspecified 65nm process (I should decap one at some point and figure out whose / see what it looks like... Luton first stepping is mentioned as being fabbed at TSMC in `vtss_phy_do_page_chk` so I suspect the rest are as well).
+
+The SERDES macro was developed by the "German Design Center" (in the Dortmund area, according to some LinkedIn hits from a google search) - interesting to know, but not particularly useful in this context.
 
 The IBIS model describes some very useful parameters. We don't know how to actually set them yet, but we know they exist, their ranges, and (most importantly) their names:
 
@@ -140,6 +142,21 @@ Anyway, the PHY init script has a big block of triplet writes to 0x12, 0x11, 0x1
 
 Guessing these are chicken bits of some sort too, but who knows.
 
+EDIT: `vtss_phy_optimize_receiver_init` mentions some stuff about registers called `half_comp_en` and `half_adc`. There's also some stuff in `vtss_phy_power_opt` that someone might want to dig into eventually. Seems to be some sort of link training to save power by reducing TX amplitude or something? `vtss_phy_optimize_receiver_reconfig` talks about `vga_state` as well.
+
+Very rough conjecture and not tested in the slightest:
+* 0x12: read pointer
+* 0x11: read/write data register
+* 0x10: write pointer
+
+`vtss_phy_debug_tr_regdump_print` may also be worth looking at, it suggests that 0x10 might be a read pointer too?
+
+## MCB (Macro Configuration Bus)
+
+The VSC742x datasheet goes into a little more detail about this - basically it's a separate bus used for configuring the SERDES6G.
+
+There's no direct access to the MCB on the VSC8512 from the outside. Instead, you issue a command to the MCU to read all MCB registers from a SERDES macro into a working buffer ("PRAM", "cfg_buf", or "shadow registers"), use peek/poke commands to manipulate this buffer, then issue another command to write it back to one or more SERDES macros.
+
 ## Understanding the MCU interface
 
 So now we're back to trying to understanding the MCU interface a bit more to try and figure out how to do fun things with it (and to solve my original problem of configuring the equalizer).
@@ -162,7 +179,7 @@ After some digging through `vtss_phy.c` and the VSC8512 datasheet, I made some p
 
 #### Bit 14 set: Indirect pointer format
 
-This instruction sets a 15-bit pointer into the internal address space used by peek/poke commands.
+This instruction sets a 15-bit pointer `mem_addr` into the MCU memory address space used by peek/poke commands.
 
 * `[15]`: always 1 (execute command)
 * `[14]`: always 1 (select indirect pointer mode)
@@ -179,6 +196,249 @@ This instruction executes a command and optionally returns data.
 * `[13:4]`: arguments, opcode dependent
 * `[3:0]`: opcode
 
+### Command codes
+
+#### 0x0: Set MAC mode / write MCB to shadow registers
+
+Two commands are documented in datasheet table 77:
+* `80b0`: select 12 phy SGMII mode
+* `80a0`: select 12 phy QSGMII mode
+
+One undocumented commands is known from MESA:
+* `9cc0`: write shadow registers to ports selected by the addr_vec bitmask
+
+It looks like Tesla uses `80e0` for QSGMII mode but I haven't seen this used in any of the Atom12/Luton26 code.
+
+#### 0x1: Set SERDES media mode
+
+Two commands are documented in datasheet table 77:
+* `8x81`: select multi-media port 1000baseX mode (bits 11:8 are bitmask of PHY11:PHY8, 1 to set mode, 0 to preserve)
+* `8x91`: select multi-media port 100baseFX mode (bits 11:8 are bitmask of PHY11:PHY8, 1 to set mode, 0 to preserve)
+
+#### 0x3: Read MCB to shadow registers
+
+One undocumented command is known from MESA:
+
+* `[15]`: always 1 (execute command)
+* `[14]`: always 0 (select command mode)
+* `[13:12]`: always 0 (reserved/ignored?)
+* `[11:8]`: SERDES macro index on the specified MCB
+* `[7:4]`: MCB bus index
+* `[3:0]`: opcode (always `4'h3`)
+
+MCB bus indexes for the VSC8512:
+* 0: SERDES1G macros
+* 1: SERDES6G macros
+* 2: LCPLL
+
+SERDES1G macro indexes on MCB bus 0:
+* 0: SERDES1G macro 0 (SGMII lane 1)
+* 1: SERDES1G macro 1 (SGMII lane 2)
+* 2: SERDES1G macro 2 (SGMII lane 4)
+* 3: SERDES1G macro 3 (SGMII lane 5)
+* 4: SERDES1G macro 4 (SGMII lane 7 / SFP port 11)
+* 5: SERDES1G macro 5 (SGMII lane 8 / SFP port 10)
+* 6: SERDES1G macro 6 (SGMII lane 10 / SFP port 9)
+* 7: SERDES1G macro 7 (SGMII lane 11 / SFP port 8)
+
+SERDES6G macro indexes on MCB bus 1:
+* 0: SERDES6G macro 0 (SGMII lane 0 / not used for QSGMII)
+* 1: SERDES6G macro 1 (SGMII lane 3 / QSGMII lane 0)
+* 2: SERDES6G macro 2 (SGMII lane 6 / QSGMII lane 1)
+* 3: SERDES6G macro 3 (SGMII lane 9 / QSGMII lane 2)
+
+#### 0x4: Suspend 8051 patch
+
+This disables updated 8051 firmware (and I guess reverts to the ROM version) temporarily.
+
+* `[15]`: always 1 (execute command)
+* `[14]`: always 0 (select command mode)
+* `[13:12]`: always 2'b01
+* `[11:4]`: `8'h01` to suspend microcode, `8'h0` to resume
+* `[3:0]`: opcode (always `4'h4`)
+
+#### 0x6: Byte poke
+
+* `[15]`: always 1 (execute command)
+* `[14]`: always 0 (select command mode)
+* `[13]`: always 0 (reserved/ignored?)
+* `[12]`: if 1, `mem_addr` is incremented after the poke. if 0, `mem_addr` is unchanged
+* `[11:4]`: byte to write to `mem_addr`
+* `[3:0]`: opcode (always `4'h6`)
+
+#### 0x7: Byte peek
+
+Write format:
+
+* `[15]`: always 1 (execute command)
+* `[14]`: always 0 (select command mode)
+* `[13]`: always 0 (reserved/ignored?)
+* `[12]`: if 1, `mem_addr` is incremented after the peek. if 0, `mem_addr` is unchanged
+* `[11:4]`: always 0 (reserved/ignored?)
+* `[3:0]`: opcode (always `4'h7`)
+
+Result readback format:
+
+* `[15]`: busy bit, poll until zero
+* `[14:12]`: reserved, ignore
+* `[11:4]`: byte read from MCU memory
+* `[3:0]`: reserved, ignore
+
+#### 0xd: Squelch workaround
+
+Not sure what this does, it seems only implemented or necessary in Tesla / Viper parts but noted here to explain the hole in the opcode space
+
+#### 0xf: Unimplemented / nop
+
+This is used in some pieces of the code such as `vtss_atom_patch_suspend` to temporarily disable the 8051 EEE microcode patch during TDR testing because apparently issuing an unimplemented command makes the patch suspend. Why not use command 0x4: Who knows.
+
+Per comment in the code "Note that this is necessary only because the patch for EEE consumes the micro continually to service all 12 PHYs in a timely manner and workaround one of the weaknesses in gigabit EEE in Luton26/Atom12."
+
+### MCU address space
+
+I have not yet attempted to read or mess with most of the 8051 address space.
+
+From looking at MESA, the following addresses, names, and values are known (this is not all inclusive, just what I've looked at)
+
+#### `47cb` / name unknown
+
+Seems related to SERDES loopback, see `vtss_phy_serdes_fmedia_loopback_private`
+
+#### `47ce` / `addr_vec`
+
+Bitmask of SERDES6G macros to write shadow registers back to when sending `9cc0` command.
+
+* `[7:4]`: reserved, write as zero
+* `[3:0]`: write enable mask for SERDES6G lanes 3:0. 1=write, 0=ignore
+
+#### `47cf` / `cfg_buf[0]`
+
+Unknown
+
+#### `47d0` / `cfg_buf[1]`
+
+Unknown
+
+#### `47d1` / `cfg_buf[2]`
+
+Unknown
+
+#### `47d2` / `cfg_buf[3]`
+
+Unknown
+
+#### `47d3` / `cfg_buf[4]`
+
+Unknown
+
+#### `47d4` / `cfg_buf[5]`
+
+Unknown
+
+#### `47d5` / `cfg_buf[6]`
+
+Unknown
+
+#### `47d6` / `cfg_buf[7]`
+
+Unknown
+
+#### `47d7` / `cfg_buf[8]`
+
+Unknown
+
+#### `47d8` / `cfg_buf[9]`
+
+* `[7:5]`: low 3 bits of `ob_post0`, output buffer postcursor 0 tap
+* `[4:0]`: unknown
+
+#### `47d9` / `cfg_buf[10]`
+
+* `[7]`: unknown
+* `[6]`: ib_rst
+* `[5:3]`: unknown
+* `[2:0]`: high 3 bits of `ob_post0`, output buffer postcursor 0 tap
+
+#### `47da` / `cfg_buf[11]`
+
+See `vtss_phy_atom12_cfg_ib_cterm_ena_private`
+
+* `[7:4]`: unknown
+* `[3]`: ib_cterm_ena
+* `[2]`: ib_eq_mode
+* `[1:0]`: unknown
+
+#### Other cfg_buf
+
+According to `vtss_phy_atom12_patch_setttings_get_private` (note the typo), the `cfg_buf` array is 36 bytes long but not much is known about the higher words.
+
+`vtss_phy_serdes_prbs_conf_get` suggests words 36 and 35 are BIST related but this might be for Tesla not Atom/Luton?
+
+Registers and fields mentioned in passing in the code worth digging into:
+
+ob_cfg0:
+* `ena1v_mode`
+* `ob_pol`
+* `ob_post0`
+* `ob_post1`
+* `ob_sr_h`
+* `ob_resistor_ctr`
+* `ob_sr`
+
+ob_cfg1:
+* `ob_ena_cas`
+* `ob_lev`
+
+des_cfg:
+* `phy_ctrl`
+* `mbtr_ctrl`
+* `bw_hyst`
+* `bw_ana`
+
+ib_cfg0:
+* `ib_rtrm_adj`
+* `ib_sig_det_clk_sel`
+* `ib_reg_pat_sel_offset`
+* `ib_cal_ena`
+
+ib_cfg1:
+* `ib_tjtag`
+* `ib_tsdet`
+* `ib_scaly`
+* `ib_frc_offset`
+
+ib_cfg2:
+* `ib_tinfv`
+* `ib_tcalv`
+* `ib_ureg`
+
+ib_cfg3: mentioned, didn't look at in any detail
+
+ib_cfg4: mentioned, didn't look at in any detail
+
+Some stuff in `vtss_phy.h` includes various macros for bitfield names like `VTSS_TESLA_SERDES6G_ANA_CFG_OB_POST0_6G` and it appears Tesla uses the same or very similar SERDES as Luton26/Atom12.
+
+#### `47f3` / `stat_buf`
+
+8 bytes long, no other details reversed.
+
+Digging in `vtss_phy_chk_serdes_init_mac_mode_private` will probably shed light on variables `sys_rst`, `ena_lane`, `pll_fsm_ena`, `hrate`, `qrate`, `if_mode`, `ib_fx100_ena`, `des_cpmd_sel`, `des_100fx_cpmd_ena` but I haven't spent any time on this.
+
+`vtss_serdes6g_tesla_rcpll_status_get_private` suggests the following fields for the RC PLL (SERDES1G?):
+* bit 10: `out_of_range`
+* bit 11: `cal_error`
+* bit 12: `cal_not_done`
+
+`vtss_lcpll_tesla_status_get_private` suggests the following fields for the LC PLL (SERDES6G?):
+* bit 45: `lock_status`
+* bit 36: `cal_done`
+* bit 35: `cal_error`
+* bit 32: `fsm_lock`
+* bit 31:29: `fsm_stat`
+* bit 18:14: `gain_stat`
+
 ## QSGMII equalizer testing
+
+So, with all that, where does that leave us?
 
 ## Conclusions
