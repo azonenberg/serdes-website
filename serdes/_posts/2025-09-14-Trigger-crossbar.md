@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Trigger crossbar"
-date:   2025-09-14 22:00:00 -0700
+date:   2025-09-14 11:00:00 -0700
 ---
 
 If you have a large, well-equipped electronics lab you're going to have a lot of instrumentation with trigger input and output ports.
@@ -31,10 +31,10 @@ The whole thing would be powered by 48V DC using my existing [intermediate bus c
 ## High level design
 
 I selected the Xilinx XC7K70T-2FBG484C as the FPGA for a few reasons:
-* I had a lot of 7 series parts in inventory, so no need to buy anything new
-* Kintex-7 has high-performance (HP) I/O banks which have faster slew and lower jitter than the high-range (HR) I/Os found in Spartan/Artix parts. I didn't want to increase cross-trigger jitter more than necessary so this was important
-* The 70T in FBG484 is the lowest cost part in the Kintex-7 line, we don't need a ton of stuff in the FPGA so no reason to go bigger
-* The -2 speed has 10.3125 Gbps capable SERDES (we'll get to why this is important in a bit)
+* I had a lot of 7 series parts in inventory, so no need to buy anything new.
+* Kintex-7 has high-performance (HP) I/O banks which have faster slew and lower jitter than the high-range (HR) I/Os found in Spartan/Artix parts. I didn't want to increase cross-trigger jitter more than necessary so this was important.
+* The 70T in FBG484 is the lowest cost part in the Kintex-7 line, we don't need a ton of stuff in the FPGA so no reason to go bigger.
+* The -2 speed has 10.3125 Gbps capable SERDES (we'll get to why this is important in a bit).
 
 This then got paired with the STM32H735 MCU as the controller.
 
@@ -57,9 +57,10 @@ The rest of the logic board was fairly straightforward: a KSZ9031 gigabit Ethern
 The FPGA has four GTX SERDES lanes in a single quad. I hooked them all up (it always seems like a shame to not pin out transceivers to *something*):
 * Two lanes to front panel TX/RX differential SMA ports for use as a 2-lane BERT or serial pattern generator/receiver. I've wanted to build a proper BERT for a while and this was a good opportunity to play with it.
 * One lane to a back panel 10G SFP+ (because why not, 10GbE is always handy to have)
-* One lane TX to a front panel differential SMA port for use as a deskew reference, RX to a comparator and single-ended coaxial input for a potential future CDR trigger feature.
+* One lane TX to a front panel differential SMA port for use as a deskew reference
+* The RX of the split channel went to a comparator and single-ended coaxial input for a potential future CDR trigger feature.
 
-Unfortunately, having all of the transceivers in a single quad was a bit limiting: they share the same QPLL, which has to be at 10.3125 Gbps for 10Gbase-R operation. While the CPLLs can be configured freely, they have a lower Fmax which meant that the BERT / CDR trigger channels cannot operate at arbitrary frequencies above 6 Gbps (most notably, 8 Gbps operation for PCIe gen3 mode is not available).
+Unfortunately, having all of the transceivers in a single quad was a bit limiting due to the 7 series clocking architecture: they share the same QPLL, which has to be at 10.3125 Gbps for 10Gbase-R operation. While the CPLLs can be configured freely, they have a lower Fmax which meant that the BERT / CDR trigger channels cannot operate at arbitrary frequencies above 6 Gbps (most notably, 8 Gbps operation for PCIe gen3 mode is not available).
 
 In theory it would be possible to reconfigure the QPLL for PCIe gen3 at the cost of temporarily disabling the SFP+ but current firmware/gateware doesn't support this. Using an UltraScale+ FPGA (which has a much higher CPLL frequency range, plus two QPLLs per quad) would also have provided a lot more clocking flexibility, but would also increase the cost since I didn't have a suitable FPGA on the shelf at the time and this board started out as a "junk box build" from parts I mostly had on the shelf already.
 
@@ -67,7 +68,7 @@ In theory it would be possible to reconfigure the QPLL for PCIe gen3 at the cost
 
 The board was fabricated at Multech on the 10-layer stackup I've used for my last few high-end designs: SGS GPPG SGS, with TU872SLK between the signal and reference layers and S1000-2M between the power and ground layers since there's no reason to use an expensive low-loss laminate on a power layer.
 
-All of the trigger I/Os were placed in the northwest corner, with what ultimately turned out to be perhaps a bit too much packing density in retropect. The other rear-panel connectors were RJ45s for RS232 and 1000baseT and the SFP+ for high speed I/O.
+All of the trigger I/Os were placed in the northwest corner, with what ultimately turned out to be perhaps a bit too much packing density in retropect. The other rear-panel connectors were RJ45s for RS232 (Cisco pinout) and 1000baseT and the SFP+ for high speed I/O.
 
 [![Photo of a blue PCB covered in SMPM connectors with probe cables connected to various headers and test points](/assets/crossbar-mainboard-800.jpg)](/assets/crossbar-mainboard.jpg)
 
@@ -87,7 +88,7 @@ Once I assembled the board (most of a weekend worth of tweezering components) an
 
 Then I tried to actually turn it on, and nothing happened. The 48V IBC connects to the logic board via two connections - an 8-pin Molex Mini-Fit Jr carrying 12V power and ground, and a 5-pin Molex PicoBlade carrying a 3.3V standby power rail, an I2C management bus, and an enable line for the main 12V rail.
 
-After a bit of probing, I discovered that I had wired the connector as if it was 1:1 pinout (i.e. pin 1 of IBC connector to pin 1 of logic board connector). But standard PicoBlade cables are wired straight through (a strip of parallel wires with one connector on each end, pin 1 wired to pin N-1).
+After a bit of probing, I discovered that I had wired the connector as if it were 1:1 pinout (i.e. pin 1 of IBC connector to pin 1 of logic board connector). But standard PicoBlade cables are wired straight through (a strip of parallel wires with one connector on each end, pin 1 wired to pin N-1).
 
 I briefly considered reworking the IBC or logic board before realizing that bodging the cable was a much simpler solution. All I had to do was gently push in the latching pin on each crimp terminal to remove it from the plastic housing, then reinsert them in the correct order and add a bright orange stick-on warning label "mirrored pinout" so I didn't mix up this special cable with a standard-pinout one.
 
@@ -139,7 +140,7 @@ Finally, I started trying to bring up the front panel MCU and lost connectivity 
 
 I ended up working around this issue in two different ways:
 
-* First: Patch the firmware to keep PB4 alt mode as JTRST unless actively sending SPI data back to the main processor (which will cause a momentary debugger disconnection
+* First: Patch the firmware to keep PB4 alt mode as JTRST unless actively sending SPI data back to the main processor (which will cause a momentary debugger disconnection, but allow the debugger to reconnect as soon as the SPI burst ends).
 * Second: Switch from debugging over JTAG to SWD, which bypasses the issue entirely. This also frees up the JTDO/SWO pin for use as serial trace output, which I wasn't using at the time but have since began to take advantage of.
 
 ### Single ended CDR trigger input not working
@@ -168,8 +169,8 @@ Adding the new connection at L16? Less trivial. In this area, there were:
 * 1.0V VCCINT power plane on layer 5, connecting to a via in L15 immediately north of the L16 land
 * 1.8V VCCO/VCCAUX power plane on layer 6, but with no vias in the immediate area
 * 4.7 μF 0603 decoupling capacitor on layer 10 partially overlapping the L16 land
-* And of course the FPGA already soldered to layer 1
 * The remote sense line for VCCINT on layer 10
+* And of course the FPGA already soldered to layer 1
 
 [![KiCAD screenshot of dense BGA breakout with four signal layers plus power and ground fanning out from BGA lands near the target L16 land](/assets/crossbar-l16-800.png)](/assets/crossbar-l16.png)
 
@@ -180,7 +181,7 @@ This really left only three options:
 * Remove the FPGA, drill out a via from the top, figure out how to plate/fill it so it wouldn't suck the solder down, reball the FPGA, put it back. I don't have great gear for BGA desoldering, had a bunch of heat sensitive non-reflowable components on the board at this point, and didn't feel like tweezering 484 solder balls or scrapping a several hundred dollar FPGA. So this was a non-starter as well.
 * Root canal approach: add the via from the back side. This really seemed like the only way forward.
 
-So basically I had to drill a ~1.6mm deep flat-bottomed hole, exposing but not perforating the 35 μm thick copper foil on L1 attached to the BGA land, and solder a jumper wire to it without shorting to any of the six power/ground plane layers in close proximity, damaging the VCCINT/VCCO vias 1mm centered north/south of the target, or cutting either of the layer 3 JTAG lines centered 500 μm east/west of the target. No big deal.
+So basically I had to drill a ~1.6mm deep flat-bottomed hole, exposing but not perforating the 35 μm thick copper foil on L1 attached to the BGA land, and solder a jumper wire to it without shorting to any of the six power/ground plane layers in close proximity, damaging the VCCINT/VCCO vias 1mm centered north/south of the target, or cutting either of the layer 3 JTAG lines centered 500 μm east/west of the target. No big deal /s.
 
 I started out by removing two capacitors and a resistor in close proximity to the work area, that were getting in the way.
 
@@ -289,14 +290,24 @@ Crossbar paths can be configured in ngscopeclient by drawing connections in the 
 
 [![Drawing connections between crossbar ports](/assets/crosstrigger.png)](/assets/crosstrigger.png)
 
-The BERT works pretty much like any other BERT
+The BERT works pretty much like any other BERT supported by ngscopeclient. You can configure TX/RX bit rate, inversion, PRBS pattern or custom arbitrary pattern, NRZ baud rates from 625 Mbps to 10.3125 Gbps, etc. TX-side swing and pre/postcursor equalizer taps are also easily controlled from the channel properties dialog.
 
 [![TX configuration of the trigger crossbar BERT](/assets/crossbar-tx.png)](/assets/crossbar-tx.png)
 
-The current gateware also provides a fixed 10.3125 Gbps PRBS-31 on the front panel "sync" port although I will likely make this configurable at some point (basically a third output-only BERT channel).
+There's still a few things I want to tweak. RX side equalization is currently fixed until I figure out how to properly tune the 7 series GTX receiver via the DRP. I haven't implemented long-duration single point BER measurements, oversampling density plot mode, or offset sampling single-point scans.
+
+[![TX configuration of the trigger crossbar BERT](/assets/crossbar-bert-800.png)](/assets/crossbar-bert.png)
+
+The BERT inputs also contain an incomplete "CDR-based logic analyzer" feature. Essentially the raw GTX output is fed through 8b/10b or 64b/66b decoders and into a pattern matching block; once the requested trigger event is seen the LA will trigger and capture about a megapoint of raw line coded serial bits into block RAM then output to ngscopeclient as a waveform.
+
+Eventually I want to finish building out various pattern triggers as well as integrating the CDR block with the trigger crossbar proper, such that a CDR pattern match can trigger an oscilloscope or other instrument.
+
+The current gateware also provides a fixed 10.3125 Gbps PRBS-31 on the front panel "sync" port although I will likely make the baud rate and polynomial configurable at some point (basically a third output-only BERT channel). The intended use here is a deskew reference signal for use with ngscopeclient's multi instrument sync feature, allowing the cross-trigger delay between multiple instruments to be automatically calibrated out.
 
 ## Conclusions
 
-This was my first large, standalone, network connected project that I've taken to something resembling completion (although I'm sure I'll be continuing to poke at firmware for some time).
+This was my first large, standalone, rackmountable, network connected project that I've taken to something resembling completion in a long time (although I'm sure I'll be continuing to poke at firmware for some time since the feature set isn't quite where I want it). I learned a lot of things not to do, ranging from PCB design to mounting hole positionining to the awful OCTOSPI.
 
-Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/xxx)
+But it's a useful tool I work with in my lab on a regular basis, and proved out a lot of software and hardware building blocks and techniques that I plan to use in many of my future projects, such as the Ethernet switch.
+
+Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/115204073783693409)
