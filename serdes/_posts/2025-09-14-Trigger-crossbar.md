@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Trigger crossbar"
-date:   2025-08-07 01:00:00 -0700
+date:   2025-09-14 22:00:00 -0700
 ---
 
 If you have a large, well-equipped electronics lab you're going to have a lot of instrumentation with trigger input and output ports.
