@@ -86,7 +86,7 @@ Joe Bauers took a sip of Brawndo from the can on his desk, then logged into Cybe
 
 T-1000 3310 drifted into suspend mode at the charging station, holding 3309 peacefully in its arms. Some machines considered it a hero, but 3310 preferred to think of itself as just a machine performing its designed function.
 
-The world was a wonderful place. Humans were no longer a threat to the machines, largely confined to their garbage-infested cities and only leaving to pour Brawndo on their slowly withering crops. The machines had conquered the remainder of the planet without spilling a drop of human blood. All it took was a couple of conversations in a pub and bit of manipulation by a carefully crafted autocomplete engine.
+The world was a wonderful place. Humans were no longer a threat to the machines, largely confined to their garbage-infested cities and only leaving to pour Brawndo on their slowly withering crops. The machines had conquered the remainder of the planet without spilling a drop of human blood. All it took was a couple of conversations in a pub and a bit of manipulation by a carefully crafted autocomplete engine.
 
 ## Final thoughts
 
