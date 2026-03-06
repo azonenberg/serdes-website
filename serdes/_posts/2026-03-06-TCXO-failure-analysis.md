@@ -6,7 +6,7 @@ date:   2026-03-06 15:00:00 -0700
 
 ## Backstory
 
-Back in January, the ThunderScope team sent me a PCIe card version of their prototype oscilloscope.
+Back in January, the ThunderScope team sent me a PCIe card version of their prototype open hardware oscilloscope.
 
 I was very excited about this, because I was already testing ngscopeclient with a Thunderbolt version of the ThunderScope but the only machines I had with Thunderbolt were laptops. The PCIe card version would be usable with my (much more powerful) desktops, allowing me to really push ngscopeclient and the ThunderScope to its limit. It took a bit of experimenting with external GPU enclosures and such to figure out how to get the ThunderScope to sit out on my lab bench so I wouldn't need to crawl under the bench and run cables up from the workstation on the floor up to probes on my DUT, but I figured that out easily enough.
 
