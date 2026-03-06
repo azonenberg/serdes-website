@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "TCXO failure analysis"
-date:   2026-03-06 13:00:00 -0700
+date:   2026-03-06 15:00:00 -0700
 ---
 
 ## Backstory
@@ -134,7 +134,7 @@ Minimum metal 1 feature size is around 660 nm with a 1225 nm pitch, metal 3 has 
 
 I'm far from an expert at reading analog VLSI layout so I didn't dig deeper - I can recognize some structures like large capacitors (big solid colored rectangles on lower layers) and polysilicon resistors (long skinny squiggles on the green layer), but didn't attempt to deprocess the device or do extensive reverse engineerign.
 
-[![Analog region seen under Mitutoyo 100x/0.90 objective](/assets/tcxo-analog-800.jpg)](/assets/tcxo-analog.jpg)
+[![Analog region seen under Mitutoyo 100x/0.90 objective](/assets/tcxo-analog1-800.jpg)](/assets/tcxo-analog1.jpg)
 
 [![Vias from M3 to M2](/assets/tcxo-vias-800.jpg)](/assets/tcxo-vias.jpg)
 
@@ -168,4 +168,4 @@ The failure of the TCXO was the result of the long bond wire between the control
 
 After finishing the lab work and while writing this blog, Aleksorsist told me she had seen a second case of the same failure mode - TCXO failing with flatlined output after ultrasonic cleaning during rework. I don't have the failed part and it may have been scrapped already, but that's pretty strong evidence that the sonication was a contributing factor.
 
-Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/fixme)
+Like this post? [Drop me a comment on Mastodon](https://ioc.exchange/@azonenberg/116184704294419148)
