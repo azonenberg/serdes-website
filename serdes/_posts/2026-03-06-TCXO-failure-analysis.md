@@ -132,7 +132,7 @@ Looking at some of the analog areas which are less dense than the digital, it's 
 
 Minimum metal 1 feature size is around 660 nm with a 1225 nm pitch, metal 3 has larger 940 nm features with around 1400 nm pitch (however, overglass likely makes the wires on M3 appear fatter than the actual metal features are). M3-M2 vias do not have any visible sagging in the metal trace, but can be easily identified visually by a roughly 2000 nm circular capture pad on the conductor. Standard cell rows are about 9.9 μm tall, consistent with a technology node around 250 nm.
 
-I'm far from an expert at reading analog VLSI layout so I didn't dig deeper - I can recognize some structures like large capacitors (big solid colored rectangles on lower layers) and polysilicon resistors (long skinny squiggles on the green layer), but didn't attempt to deprocess the device or do extensive reverse engineerign.
+I'm far from an expert at reading analog VLSI layout so I didn't dig deeper - I can recognize some structures like large capacitors (big solid colored rectangles on lower layers) and polysilicon resistors (long skinny squiggles on the green layer), but didn't attempt to deprocess the device or do extensive reverse engineering.
 
 [![Analog region seen under Mitutoyo 100x/0.90 objective](/assets/tcxo-analog1-800.jpg)](/assets/tcxo-analog1.jpg)
 
