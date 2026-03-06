@@ -24,7 +24,7 @@ The lack of a PLL reference clock certainly explained why the ThunderScope wasn'
 
 Most people would have stopped at this point, but I'm not most people. Why did the TCXO fail?
 
-If you've been following me for a while, you probably know that I occasionally use my lab to help friends out when they have failed components and can't afford to have a "real" IC FA workup done.
+If you've been following me for a while, you probably know that I occasionally use my home lab to help friends out when they have failed components and can't afford to have a "real" IC FA workup done.
 
 Well, thanks to [@emily@fedi.uni.horse](https://fedi.uni.horse/@emily/statuses/01K9AR9EH12HS2HARF8NQVVWYT), Andrew's Back Room Semiconductor FA Lab now has an appropriately sketchy logo. Now that we're official, we can get started on the analysis!
 
