@@ -179,14 +179,14 @@ capabilities of ngscopeclient.
 The test is fully automated, with a scalar-stairstep filter ramping load from 0 to 6A in 100 mA steps, waiting 30
 seconds between steps for thermals to stabilize, and the resulting data is plotted as values vs load current.
 
-[![ngscopeclient screenshot showing list of instruments](/assets/experiment-control-800png)](/assets/experiment-control.png)
+[![ngscopeclient screenshot showing list of instruments](/assets/experiment-control-800.png)](/assets/experiment-control.png)
 
 The final characterization setup used 16 channels of data from four physical instruments (R&S power supply, Siglent
 load, R&S multimeter, Teledyne LeCroy oscilloscope), plus on-board sensor data streaming via SWO to ngscopeclient (I'll
 probably do a more comprehensive post about this flow once I've fine tuned it a bit), being processed by 54 different
 filter graph blocks to produce the final curves.
 
-[![ngscopeclient screenshot showing a complex filter graph, zoomed out too far to see much detail](/assets/ibc-filtergraph-800png)](/assets/ibc-filtergraph.png)
+[![ngscopeclient screenshot showing a complex filter graph, zoomed out too far to see much detail](/assets/ibc-filtergraph-800.png)](/assets/ibc-filtergraph.png)
 
 Total loss (power out minus power in) starts at about 800 mW with no load, increasing to just over 6W at max load.
 This is a massive improvement over the 3W idle power of the old design.
@@ -204,7 +204,7 @@ Realistically, I'm a long ways from needing 6A on any of my designs anyway. And 
 4 modules for better performance under high load, so if I'm ever going to design something that power hungry I'd
 probably scale up the IBC to match.
 
-[![ngscopeclient screenshot showing graphs of performance data vs load current](/assets/final-curves-800png)](/assets/final-curves.png)
+[![ngscopeclient screenshot showing graphs of performance data vs load current](/assets/final-curves-800.png)](/assets/final-curves.png)
 
 Output ripple is only a few mV RMS, but around 330 mV p-p because of the spikes from the 3V3_SB switcher I mentioned
 previously.
